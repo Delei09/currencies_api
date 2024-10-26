@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-
 import { UserProps } from './types';
 import { Users } from './users.entity';
 
@@ -12,17 +11,18 @@ export class UsersService {
     private readonly usersRepository: Repository<Users>,
   ) {}
 
-  async create({ username, password }: UserProps) {
-    const user = this.usersRepository.create({ username, password });
+  async create({ username, password, email }: UserProps) {
+    const user = this.usersRepository.create({ username, password, email , currenciesFavorite: []});
     return this.usersRepository.save(user);
   }
 
-  findOne(username: string): Promise<Users | null> {
-    return this.usersRepository.findOneBy({ username });
+  findOne(id: number): Promise<Users | null> {
+    return this.usersRepository.findOneBy({ id });
   }
 
-  async delete(id: string): Promise<void> {
+  async delete(id: number): Promise<string> {
     await this.usersRepository.delete(id);
+    return 'deleted user with id: ' + id;
   }
 
   async update({ id, username, password, currenciesFavorite }: UserProps) {

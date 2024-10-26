@@ -13,7 +13,7 @@ export class UsersController {
   }
 
   @Delete(':id')
-  delete(@Body() id: string) {
+  delete(@Body() id: number) {
     return this.usersService.delete(id);
   }
 
@@ -23,7 +23,7 @@ export class UsersController {
   }
 
   @Get(':id')
-  findOne(@Body() id: string) {
+  findOne(@Body() id: number) {
     return this.usersService.findOne(id);
   }
 }

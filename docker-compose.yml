@@ -1,0 +1,18 @@
+version: '3.1'
+
+services:
+
+  db:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${ROOT_PASSWORD_DB} # Senha do usuário root
+      MYSQL_DATABASE: ${NAME_DB}        # Nome do banco de dados a ser criado
+      MYSQL_USER: ${USERNAME_DB}                    # Nome do usuário adicional
+      MYSQL_PASSWORD: ${PASSWORD_DB}       # Senha do usuário adicional
+    ports:
+      - "${PORT_DB}:${PORT_DB}"                       # Mapeia a porta do MySQL para o host
+    volumes:
+      - db_data:/var/lib/mysql            # Persiste os dados do banco de dados
+
+volumes:
+  db_data:
