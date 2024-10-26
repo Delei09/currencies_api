@@ -14,6 +14,6 @@ export class Users {
   @Column()
   email: string;
 
-  @Column('json') 
+  @Column('json')
   currenciesFavorite: string[];
 }

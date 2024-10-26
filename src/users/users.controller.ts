@@ -1,14 +1,14 @@
 import { Body, Controller, Delete, Get, Patch, Post } from '@nestjs/common';
 
-import { UserProps } from './types';
 import { UsersService } from './users.service';
+import { UserDto } from './dto/user-dto';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  create(@Body() body: UserProps) {
+  create(@Body() body: UserDto) {
     return this.usersService.create(body);
   }
 
@@ -18,7 +18,7 @@ export class UsersController {
   }
 
   @Patch(':id')
-  update(@Body() body: UserProps) {
+  update(@Body() body: UserDto) {
     return this.usersService.update(body);
   }
 
