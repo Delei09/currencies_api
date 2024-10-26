@@ -12,7 +12,7 @@ describe('UsersService (Integration)', () => {
   let service: UsersService;
   let db: DataSource;
 
-  const userProps : UserProps= {
+  const userProps: UserProps = {
     username: 'testuser',
     password: 'password',
     email: 'email@email.com',
@@ -56,7 +56,7 @@ describe('UsersService (Integration)', () => {
     expect(userProps.username).toEqual(user.username);
   });
 
-  it('should find a user', async () => {
+  it('should find a user with id', async () => {
     const user = await service.create(userProps);
     const findUser = await service.findOne(user.id);
     expect(findUser).toBeDefined();
@@ -73,20 +73,37 @@ describe('UsersService (Integration)', () => {
       email: 'email@email.com',
       currenciesFavorite: [],
     });
-   
+
     const findUser = await service.findOne(updatedUser.id);
     expect(findUser.username).toEqual('updateduser');
+  });
+
+  it('should find a user with username', async () => {
+    const user = await service.create(userProps);
+    const findUser = await service.findOneUsername(user.username);
+    expect(findUser).toBeDefined();
+    expect(findUser.username).toEqual(user.username);
   });
 
   it('should delete a user', async () => {
     const user = await service.create(userProps);
 
-   const userDeleted = await service.delete(user.id)
-   
+    const userDeleted = await service.delete(user.id);
+
     const findUser = await service.findOne(user.id);
     expect(findUser).toEqual(null);
 
-    expect(userDeleted).toEqual("deleted user with id: 1");
+    expect(userDeleted).toEqual('deleted user with id: 1');
+  });
+
+  it('should validate a user', async () => {
+    await service.create(userProps);
+    const validateUser = await service.validateUser(userProps);
+    expect(validateUser).toEqual(true);
+  });
+
+  it('should call error validate a user', async () => {
+    const validateUser = await service.validateUser(userProps);
+    expect(validateUser).toEqual(false);
   });
 });
-
