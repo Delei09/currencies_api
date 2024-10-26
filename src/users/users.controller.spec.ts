@@ -1,16 +1,22 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
+import { UserDto } from './dto/user-dto';
 
 describe('UsersController', () => {
-  let service: UsersService;
   let controller: UsersController;
-  const result = {
-    id: 1,
-    username: 'update',
-    password: 'update',
-    email: 'update',
-    currenciesFavorite: [],
+  let service: UsersService;
+  const userDto: UserDto = {
+    username: 'testuser',
+    password: 'password',
+    email: 'user@example.com',
+  };
+
+  const mockUsersService = {
+    create: jest.fn(),
+    delete: jest.fn(),
+    update: jest.fn(),
+    findOne: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -19,12 +25,7 @@ describe('UsersController', () => {
       providers: [
         {
           provide: UsersService,
-          useValue: {
-            create: jest.fn(),
-            findOne: jest.fn(),
-            delete: jest.fn(),
-            update: jest.fn(),
-          },
+          useValue: mockUsersService,
         },
       ],
     }).compile();
@@ -33,41 +34,37 @@ describe('UsersController', () => {
     service = module.get<UsersService>(UsersService);
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
+  it('Should create user', async () => {
+    await controller.create(userDto);
+    expect(service.create).toHaveBeenCalledWith(userDto);
+    expect(service.create).toHaveBeenCalledTimes(1);
   });
 
-  it('should call create method', async () => {
-    const body = {
-      username: 'username',
-      password: 'password',
-      email: 'email',
+  it('Should delete user', async () => {
+    const id = 1;
+    await controller.delete(id);
+
+    expect(service.delete).toHaveBeenCalledWith(id);
+    expect(service.delete).toHaveBeenCalledTimes(1);
+  });
+
+  it('Should update user', async () => {
+    const userDto: UserDto = {
+      username: 'updateduser',
+      password: 'newpassword',
+      email: 'updated@example.com',
     };
-    jest.spyOn(service, 'create').mockResolvedValue(result);
+    await controller.update(userDto);
 
-    await expect(controller.create(body)).resolves.toEqual(result);
+    expect(service.update).toHaveBeenCalledWith(userDto);
+    expect(service.update).toHaveBeenCalledTimes(1);
   });
 
-  it('should call update method', async () => {
-    const body = {
-      username: 'update',
-      password: 'update',
-      email: 'update',
-    };
-    jest.spyOn(service, 'update').mockResolvedValue(result);
+  it('Should find user', async () => {
+    const id = 1;
+    await controller.findOne(id);
 
-    await expect(controller.update(body)).resolves.toEqual(result);
-  });
-
-  it('should call finOne method', async () => {
-    jest.spyOn(service, 'findOne').mockResolvedValue(result);
-
-    await expect(controller.findOne(1)).resolves.toEqual(result);
-  });
-
-  it('should call delete method', async () => {
-    jest.spyOn(service, 'delete').mockResolvedValue('deleted user with id: 1');
-    await expect(controller.delete(1)).resolves.toEqual('deleted user with id: 1');
+    expect(service.findOne).toHaveBeenCalledWith(id);
+    expect(service.findOne).toHaveBeenCalledTimes(1);
   });
 });
-

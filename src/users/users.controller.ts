@@ -3,6 +3,7 @@ import { Body, Controller, Delete, Get, Patch, Post } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UserDto } from './dto/user-dto';
 
+// TODO: ADD ROTE PARA RECUPERAR SENHA
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
