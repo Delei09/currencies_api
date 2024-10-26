@@ -17,6 +17,8 @@ import { Users } from './users/users.entity';
       database: process.env.NAME_DB,
       entities: [Users],
       synchronize: true,
+      migrationsRun: true,
+      migrations: ['database/migrations/*.ts'],
     }),
     UsersModule,
   ],
