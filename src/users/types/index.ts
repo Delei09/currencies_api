@@ -1,7 +1,7 @@
 export type UserProps = {
   id: string;
-  name: string;
   email: string;
+  username: string;
   password: string;
   currenciesFavorite: string[];
 };

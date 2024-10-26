@@ -15,5 +15,5 @@ export class Users {
   email: string;
 
   @Column()
-  currenciesFavorite: string;
+  currenciesFavorite: string[];
 }
