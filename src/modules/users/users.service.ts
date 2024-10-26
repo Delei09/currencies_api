@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserProps } from './types';
+import { IUser } from './types';
 import { Users } from './users.entity';
 import * as bcrypt from 'bcrypt';
 
@@ -12,9 +12,14 @@ export class UsersService {
     private readonly usersRepository: Repository<Users>,
   ) {}
 
-  async create({ username, password, email }: UserProps) {
-    const hashedPassword = await bcrypt.hash(password, 10)
-    const user = this.usersRepository.create({ username, password: hashedPassword, email , currenciesFavorite: []});
+  async create({ username, password, email }: IUser) {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = this.usersRepository.create({
+      username,
+      password: hashedPassword,
+      email,
+      currenciesFavorite: [],
+    });
     return this.usersRepository.save(user);
   }
 
@@ -31,7 +36,7 @@ export class UsersService {
     return 'deleted user with id: ' + id;
   }
 
-  async update({ id, username, password, currenciesFavorite }: UserProps) {
+  async update({ id, username, password, currenciesFavorite }: IUser) {
     const user = await this.findOne(id);
     user.username = username;
     user.password = password;
@@ -39,11 +44,11 @@ export class UsersService {
     return this.usersRepository.save(user);
   }
 
-  async validateUser({username, password}:UserProps): Promise<boolean> {
+  async validateUser({ username, password }: IUser): Promise<false | Users> {
     const user = await this.findOneUsername(username);
     if (!user) return false;
 
     const isMatch = await bcrypt.compare(password, user.password);
-    return isMatch;
+    return isMatch ? user : false;
   }
 }

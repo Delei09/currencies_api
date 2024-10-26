@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getDataSourceToken, TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 
-import { UserProps } from './types';
+import { IUser } from './types';
 import { Users } from './users.entity';
 import { UsersService } from './users.service';
 import * as dotenv from 'dotenv';
@@ -12,7 +12,7 @@ describe('UsersService (Integration)', () => {
   let service: UsersService;
   let db: DataSource;
 
-  const userProps: UserProps = {
+  const userProps: IUser = {
     username: 'testuser',
     password: 'password',
     email: 'email@email.com',
@@ -99,7 +99,7 @@ describe('UsersService (Integration)', () => {
   it('should validate a user', async () => {
     await service.create(userProps);
     const validateUser = await service.validateUser(userProps);
-    expect(validateUser).toEqual(true);
+    expect(validateUser).toBeTruthy();
   });
 
   it('should call error validate a user', async () => {

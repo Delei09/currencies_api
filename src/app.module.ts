@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
-import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as dotenv from 'dotenv';
-import { Users } from './users/users.entity';
+
+import { AuthModule } from './modules/auth/auth.module';
+import { Users } from './modules/users/users.entity';
+import { UsersModule } from './modules/users/users.module';
 
   dotenv.config();
 
@@ -21,6 +23,7 @@ import { Users } from './users/users.entity';
       migrations: ['database/migrations/*.ts'],
     }),
     UsersModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
