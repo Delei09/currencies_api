@@ -3,6 +3,7 @@ import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { Public } from '../../decorator/public';
 import { UserDto } from '../users/dto/user-dto';
 import { AuthService } from './auth.service';
+import { IRefreshToken } from './types';
 
 @Controller('auth')
 export class AuthController {
@@ -13,5 +14,10 @@ export class AuthController {
   @Post('login')
   signIn(@Body() user: UserDto) {
     return this.authService.signIn(user);
+  }
+
+  @Post('refresh')
+  refresh(@Body() refreshToken: IRefreshToken) {
+    return this.authService.refresh(refreshToken);
   }
 }
