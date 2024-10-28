@@ -5,6 +5,7 @@ import * as dotenv from 'dotenv';
 import { AuthModule } from './modules/auth/auth.module';
 import { Users } from './modules/users/users.entity';
 import { UsersModule } from './modules/users/users.module';
+import { CurrenciesModule } from './modules/currencies/currencies.module';
 
   dotenv.config();
 
@@ -24,6 +25,7 @@ import { UsersModule } from './modules/users/users.module';
     }),
     UsersModule,
     AuthModule,
+    CurrenciesModule,
   ],
 })
 export class AppModule {}
