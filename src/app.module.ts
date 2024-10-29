@@ -8,6 +8,7 @@ import { UsersModule } from './modules/users/users.module';
 import { CurrenciesModule } from './modules/currencies/currencies.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ScheduleModule } from '@nestjs/schedule';
+import { EventsModule } from './events/events.module';
   dotenv.config();
 
 @Module({
@@ -29,6 +30,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     UsersModule,
     AuthModule,
     CurrenciesModule,
+    EventsModule
   ],
 })
 export class AppModule {}
