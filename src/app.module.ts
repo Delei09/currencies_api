@@ -6,11 +6,14 @@ import { AuthModule } from './modules/auth/auth.module';
 import { Users } from './modules/users/users.entity';
 import { UsersModule } from './modules/users/users.module';
 import { CurrenciesModule } from './modules/currencies/currencies.module';
-
+import { MongooseModule } from '@nestjs/mongoose';
+import { ScheduleModule } from '@nestjs/schedule';
   dotenv.config();
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
+    MongooseModule.forRoot('mongodb://localhost/nest'),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.HOST_DB,

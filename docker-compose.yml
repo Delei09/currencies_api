@@ -1,18 +1,35 @@
 version: '3.1'
 
 services:
-
   db:
     image: mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${ROOT_PASSWORD_DB} # Senha do usuário root
-      MYSQL_DATABASE: ${NAME_DB}        # Nome do banco de dados a ser criado
-      MYSQL_USER: ${USERNAME_DB}                    # Nome do usuário adicional
-      MYSQL_PASSWORD: ${PASSWORD_DB}       # Senha do usuário adicional
+      MYSQL_DATABASE: ${NAME_DB}                # Nome do banco de dados a ser criado
+      MYSQL_USER: ${USERNAME_DB}                # Nome do usuário adicional
+      MYSQL_PASSWORD: ${PASSWORD_DB}            # Senha do usuário adicional
     ports:
-      - "${PORT_DB}:${PORT_DB}"                       # Mapeia a porta do MySQL para o host
+      - "${PORT_DB}:${PORT_DB}"                  # Mapeia a porta do MySQL para o host
     volumes:
-      - db_data:/var/lib/mysql            # Persiste os dados do banco de dados
+      - db_data:/var/lib/mysql                   # Persiste os dados do banco de dados
+
+  redis:
+    image: redis:latest
+    container_name: my_redis
+    ports:
+      - "6379:6379"                              # Mapeia a porta do Redis
+    volumes:
+      - redis_data:/data                         # Persiste os dados do Redis
+
+  mongo:
+    image: mongo:latest
+    container_name: my_mongo
+    ports:
+      - "27017:27017"                            # Mapeia a porta do MongoDB
+    volumes:
+      - mongo_data:/data/db                     # Persiste os dados do MongoDB
 
 volumes:
   db_data:
+  redis_data:
+  mongo_data:
