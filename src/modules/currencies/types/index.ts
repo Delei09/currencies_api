@@ -11,3 +11,7 @@ export interface ICurrency {
   timestamp: string;
   create_date: string;
 }
+
+export interface ICode {
+  code: string
+}

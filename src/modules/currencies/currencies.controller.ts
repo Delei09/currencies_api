@@ -1,10 +1,10 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
+
 import { CurrenciesService } from './currencies.service';
-import { ICurrency } from './types';
+import { ICode, ICurrency } from './types';
 
 @Controller('currencies')
 export class CurrenciesController {
-
   constructor(private readonly currenciesService: CurrenciesService) {}
   @Get()
   async getCurrencies(): Promise<ICurrency[]> {
@@ -12,7 +12,7 @@ export class CurrenciesController {
   }
 
   @Get(':code')
-  async getCurrency( code: string):  Promise<ICurrency[]>  {
+  async getCurrency(@Param() code: ICode): Promise<ICurrency[]> {
     return this.currenciesService.getCurrency(code);
   }
 }

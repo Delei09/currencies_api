@@ -1,12 +1,12 @@
 import { HttpService } from '@nestjs/axios';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Inject, Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
+import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Cache } from 'cache-manager';
-import { Model } from 'mongoose';
+import { Connection, Model } from 'mongoose';
 
-import { Currency, CurrencyDocument } from './currencies.entity';
-import { ICurrency } from './types';
+import { Currency } from './currencies.schema';
+import { ICode, ICurrency } from './types';
 import { Cron, CronExpression } from '@nestjs/schedule';
 
 const URL_GET_ALL_CURRENCIES =
@@ -21,7 +21,8 @@ export class CurrenciesService {
     private readonly httpService: HttpService,
     @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
     @InjectModel(Currency.name)
-    private readonly currencyModel: Model<CurrencyDocument>,
+    private readonly currencyModel: Model<Currency>,
+    @InjectConnection() private readonly connection: Connection
   ) {}
 
   async getCurrencies(): Promise<ICurrency[]> {
@@ -32,16 +33,20 @@ export class CurrenciesService {
     return await this.getDataAndSave();
   }
 
-  async getCurrency(code: string): Promise<ICurrency[]> {
-    //TODO: IMPLEMENTAR MECANISMO DE DADOS NO MONGO DB
-    return await this.findByCode(code);
+  async getCurrency(code: ICode): Promise<ICurrency[]> {
+    return await this.findByCode(code.code);
   }
 
-  private async saveData(currencies: Currency[]) {
-    // const createdCurruncies = new this.currencyModel(currencies);
-    // return createdCurruncies.save();
+  private async saveData(currencies: Record<string, Currency>) {
+    for (const key in currencies) {
+      if (currencies.hasOwnProperty(key)) {
+        const data = currencies[key];        
+        const currencyDoc = new this.currencyModel(data);
+        await currencyDoc.save();
+      }
+    }
   }
-
+  
   private async findByCode(code: string): Promise<Currency[]> {
     return this.currencyModel.find({ code }).exec();
   }

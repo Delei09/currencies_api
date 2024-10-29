@@ -1,8 +1,8 @@
 // src/schemas/currency.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { HydratedDocument } from 'mongoose';
 
-export type CurrencyDocument = Currency & Document;
+export type CatDocument = HydratedDocument<Currency>;
 
 @Schema()
 export class Currency {

@@ -4,7 +4,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import { CurrenciesController } from './currencies.controller';
-import { Currency, CurrencySchema } from './currencies.entity';
+import { Currency, CurrencySchema } from './currencies.schema';
 import { CurrenciesService } from './currencies.service';
 
 @Module({
