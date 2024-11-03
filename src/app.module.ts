@@ -1,15 +1,17 @@
 import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
+import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as dotenv from 'dotenv';
 
 import { AuthModule } from './modules/auth/auth.module';
+import { CurrenciesModule } from './modules/currencies/currencies.module';
 import { Users } from './modules/users/users.entity';
 import { UsersModule } from './modules/users/users.module';
-import { CurrenciesModule } from './modules/currencies/currencies.module';
-import { MongooseModule } from '@nestjs/mongoose';
-import { ScheduleModule } from '@nestjs/schedule';
-import { EventsModule } from './events/events.module';
-  dotenv.config();
+import { RealTimeGateway } from './realtime/realtime.gateway';
+import { RealTimeModule } from './realtime/realtime.module';
+
+dotenv.config();
 
 @Module({
   imports: [
@@ -30,7 +32,8 @@ import { EventsModule } from './events/events.module';
     UsersModule,
     AuthModule,
     CurrenciesModule,
-    EventsModule
+    RealTimeModule
   ],
+  providers: [RealTimeGateway],
 })
 export class AppModule {}

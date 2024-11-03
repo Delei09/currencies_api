@@ -6,6 +6,7 @@ import { IUser } from '../users/types';
 import { Users } from '../users/users.entity';
 import { UsersService } from '../users/users.service';
 import { IRefreshToken } from './types';
+import { CredenciatesDto } from './dto';
 
 dotenv.config();
 
@@ -19,18 +20,18 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signIn(user: IUser): Promise<any> {
-    const userDB = await this.validateUser(user);
+  async signIn(user: CredenciatesDto): Promise<any> {
+    const userDB = await this.validateUser(user as IUser);
     const { password, ...result } = userDB;
     const tokens = await this.generateTokens(userDB);
-    return { ...result, ...tokens };
+    return { user:{...result}, ...tokens };
   }
 
   async refresh(refreshToken: IRefreshToken): Promise<any> {
     const userDB = await this.verifyToken(refreshToken.refreshToken);
     const { password, ...result } = userDB;
     const tokens = await this.generateTokens(userDB);
-    return { ...result, ...tokens };
+    return { user: result, ...tokens };
   }
 
   private async generateTokens(user: Users): Promise<any> {

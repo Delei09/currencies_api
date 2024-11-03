@@ -6,6 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { CurrenciesController } from './currencies.controller';
 import { Currency, CurrencySchema } from './currencies.schema';
 import { CurrenciesService } from './currencies.service';
+import e from 'express';
 
 @Module({
   providers: [CurrenciesService],
@@ -20,5 +21,8 @@ import { CurrenciesService } from './currencies.service';
       { name: Currency.name, schema: CurrencySchema },
     ]),
   ],
+  exports: [
+    CurrenciesService
+  ]
 })
 export class CurrenciesModule {}

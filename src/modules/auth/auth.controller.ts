@@ -4,6 +4,7 @@ import { Public } from '../../decorator/public';
 import { UserDto } from '../users/dto/user-dto';
 import { AuthService } from './auth.service';
 import { IRefreshToken } from './types';
+import { CredenciatesDto } from './dto';
 
 @Controller('auth')
 export class AuthController {
@@ -12,10 +13,11 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  signIn(@Body() user: UserDto) {
+  signIn(@Body() user: CredenciatesDto) {
     return this.authService.signIn(user);
   }
 
+  @Public()
   @Post('refresh')
   refresh(@Body() refreshToken: IRefreshToken) {
     return this.authService.refresh(refreshToken);

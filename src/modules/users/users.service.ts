@@ -13,6 +13,16 @@ export class UsersService {
   ) {}
 
   async create({ username, password, email }: IUser) {
+    const userWithSameUsername = await this.findOneUsername(username);
+    if (userWithSameUsername) {
+      throw new Error('Usuario já existe');
+    }
+
+    const userWithSameEmail = await this.usersRepository.findOneBy({ email });
+    if (userWithSameEmail) {
+      throw new Error('Email já existe');
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = this.usersRepository.create({
       username,
@@ -36,10 +46,11 @@ export class UsersService {
     return 'deleted user with id: ' + id;
   }
 
-  async update({ id, username, password, currenciesFavorite }: IUser) {
+  async update({ id, username, currenciesFavorite }: Omit<IUser, 'password'>) {
     const user = await this.findOne(id);
     user.username = username;
-    user.password = password;
+    // TODO: DAR ROOLBACK DEPOIS
+    // user.password = password;
     user.currenciesFavorite = currenciesFavorite;
     return this.usersRepository.save(user);
   }

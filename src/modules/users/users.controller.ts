@@ -1,8 +1,8 @@
-import { Body, Controller, Delete, Get, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Patch, Post } from '@nestjs/common';
 
-import { UsersService } from './users.service';
-import { UserDto } from './dto/user-dto';
 import { Public } from '../../decorator/public';
+import { UserDto } from './dto/user-dto';
+import { UsersService } from './users.service';
 
 // TODO: ADD ROTE PARA RECUPERAR SENHA
 @Controller('users')
@@ -11,8 +11,15 @@ export class UsersController {
 
   @Public()
   @Post()
-  create(@Body() body: UserDto) {
-    return this.usersService.create(body);
+  async create(@Body() body: UserDto) {
+    try {
+      return await this.usersService.create(body);
+    } catch (err) {
+      throw new HttpException(
+        err.detail || err.message,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   @Delete(':id')
@@ -21,8 +28,16 @@ export class UsersController {
   }
 
   @Patch(':id')
-  update(@Body() body: UserDto) {
-    return this.usersService.update(body);
+  async update(@Body() body: Omit<UserDto, 'password'>) {
+    //TODO: ALTERAR OMIT E CRIAR UMA NOVA ROTA APENAS PARA ADD MOEDA
+    try {
+      return await this.usersService.update(body);
+    } catch (err) {
+      throw new HttpException(
+        err.detail || err.message,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   @Get(':id')
