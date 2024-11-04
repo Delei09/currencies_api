@@ -39,13 +39,14 @@ export class CurrenciesService {
   }
 
   private async saveData(currencies: Record<string, Currency>) {
-    for (const key in currencies) {
-      if (currencies.hasOwnProperty(key)) {
-        const data = currencies[key];
-        const currencyDoc = new this.currencyModel(data);
-        await currencyDoc.save();
-      }
-    }
+    // TODO:ATUALIZAR A FORMA DE SALVAR NO MONGO
+    // for (const key in currencies) {
+    //   if (currencies.hasOwnProperty(key)) {
+    //     const data = currencies[key];
+    //     const currencyDoc = new this.currencyModel(data);
+    //     await currencyDoc.save();
+    //   }
+    // }
   }
 
   private async findByCode(code: string): Promise<Currency[]> {
